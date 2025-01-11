@@ -19,12 +19,7 @@ const connectDB = require("./db/connect");
 
 //  routers
 
-const agencyRouter = require("./routes/agencyRoutes");
 const userRouter = require("./routes/userRoutes");
-const packageRouter = require("./routes/packageRoutes");
-const reviewRouter = require("./routes/reviewRoutes");
-const bookRouter = require("./routes/bookRoutes");
-const searchRouter = require("./routes/searchRoutes");
 const homePageRouter = require("./routes/homePageRoutes");
 
 
@@ -51,12 +46,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
     app.use(express.static("./public"));
     // app.use(fileUpload());
     
-    app.use("/api/v1/search", searchRouter);
-    app.use("/api/v1/agency", agencyRouter);
     app.use("/api/v1/user", userRouter);
-    app.use("/api/v1/package", packageRouter);
-    app.use("/api/v1/review", reviewRouter);
-    app.use("/api/v1/book", bookRouter);
     app.use("/api/v1/homepage", homePageRouter);
     // app.use("/api/v1/homepage/places", placesRouter);
 
