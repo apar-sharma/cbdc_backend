@@ -21,7 +21,7 @@ const connectDB = require("./db/connect");
 
 const userRouter = require("./routes/userRoutes");
 const homePageRouter = require("./routes/homePageRoutes");
-const authRouter = require("./routes/authRoutes");
+// const authRouter = require("./routes/authRoutes");
 
 
 
@@ -49,7 +49,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
     
     app.use("/api/v1/user", userRouter);
     app.use("/api/v1/homepage", homePageRouter);
-    app.use("/api/v1/auth", authRouter);
+    // app.use("/api/v1/auth", authRouter);
     // app.use("/api/v1/homepage/places", placesRouter);
 
 
