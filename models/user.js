@@ -23,6 +23,11 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide password"],
     minlength: 6,
   },
+  balance: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
   role: {
     type: String,
     enum: ["admin","bank", "user"],
