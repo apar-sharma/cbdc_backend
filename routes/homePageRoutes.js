@@ -16,7 +16,7 @@ const getHomePageData = async (req, res) => {
 };
 
 const getSystemStats = async (req, res) => {
-  // This could be expanded to include real system statistics
+  // add some home page data here
   res.status(200).json({
     activeUsers: 0,
     totalTransactions: 0,
