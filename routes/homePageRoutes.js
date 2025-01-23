@@ -11,7 +11,7 @@ const getHomePageData = async (req, res) => {
     message: "CBDC wallet",
     user: user,
   };
-
+  
   res.status(200).json(response);
 };
 
