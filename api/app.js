@@ -15,21 +15,21 @@ const cors = require("cors");
 // const mongoSanitize = require("express-mongo-sanitize");
 
 // database
-const connectDB = require("./db/connect");
+const connectDB = require("../db/connect");
 
 //  routers
 
-const userRouter = require("./routes/userRoutes");
-const homePageRouter = require("./routes/homePageRoutes");
-const transactionRouter = require('./routes/transactionRoutes');
+const userRouter = require("../routes/userRoutes");
+const homePageRouter = require("../routes/homePageRoutes");
+const transactionRouter = require('../routes/transactionRoutes');
 
 // const authRouter = require("./routes/authRoutes");
 
 
 
 // middleware
-const notFoundMiddleware = require("./middleware/not-found");
-const errorHandlerMiddleware = require("./middleware/error-handler");
+const notFoundMiddleware = require("../middleware/not-found");
+const errorHandlerMiddleware = require("../middleware/error-handler");
 
 // app.set("trust proxy", 1);
 // app.use(
@@ -81,3 +81,4 @@ const start = async () => {
 };
 
 start();
+module.exports = app;
