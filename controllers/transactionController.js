@@ -1,5 +1,5 @@
 const Transaction = require('../models/Transaction');
-const User = require('../models/User');
+const User = require('../models/users');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const mongoose = require('mongoose');
