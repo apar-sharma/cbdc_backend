@@ -52,7 +52,9 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
     
     // app.use(express.static("./public"));
     // app.use(fileUpload());
-    
+    app.use("/", (req, res) => {
+      res.send("Welcome to CBDC wallet");
+    });
     app.use("/api/v1/user", userRouter);
     app.use("/api/v1/homepage", homePageRouter);
     app.use('/api/v1/transactions', transactionRouter);
