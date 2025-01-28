@@ -1,4 +1,4 @@
-const User = require("../models/users");
+const User = require("../models/users.js");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const { attachCookiesToResponse, createTokenUser } = require("../utils");
@@ -11,7 +11,7 @@ const register = async (req, res) => {
     throw new CustomError.BadRequestError("Email already exists");
   }
 
-  const user = await User.create({ name, email, password});
+  const user = await User.create({ name, email, password });
   const tokenUser = createTokenUser(user);
   // attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.CREATED).json({ user: tokenUser });

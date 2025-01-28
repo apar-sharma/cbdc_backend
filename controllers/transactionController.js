@@ -1,8 +1,8 @@
-const Transaction = require('../models/Transaction');
-const User = require('../models/users');
-const { StatusCodes } = require('http-status-codes');
-const CustomError = require('../errors');
-const mongoose = require('mongoose');
+const Transaction = require("../models/Transaction");
+const User = require("../models/users.js");
+const { StatusCodes } = require("http-status-codes");
+const CustomError = require("../errors");
+const mongoose = require("mongoose");
 
 const createTransaction = async (req, res) => {
   const { receiverId, amount, transactionType, description } = req.body;
@@ -17,13 +17,13 @@ const createTransaction = async (req, res) => {
     const receiver = await User.findById(receiverId);
 
     if (!receiver) {
-      throw new CustomError.NotFoundError('Receiver not found');
+      throw new CustomError.NotFoundError("Receiver not found");
     }
 
-    if (transactionType === 'transfer') {
+    if (transactionType === "transfer") {
       // Check sufficient balance
       if (sender.balance < amount) {
-        throw new CustomError.BadRequestError('Insufficient balance');
+        throw new CustomError.BadRequestError("Insufficient balance");
       }
 
       // Update balances
@@ -34,18 +34,22 @@ const createTransaction = async (req, res) => {
       await receiver.save({ session });
     }
 
-    const transaction = await Transaction.create([{
-      sender: senderId,
-      receiver: receiverId,
-      amount,
-      transactionType,
-      description,
-      status: 'completed'
-    }], { session });
+    const transaction = await Transaction.create(
+      [
+        {
+          sender: senderId,
+          receiver: receiverId,
+          amount,
+          transactionType,
+          description,
+          status: "completed",
+        },
+      ],
+      { session }
+    );
 
     await session.commitTransaction();
     res.status(StatusCodes.CREATED).json({ transaction: transaction[0] });
-
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -56,10 +60,10 @@ const createTransaction = async (req, res) => {
 
 const getAllTransactions = async (req, res) => {
   const transactions = await Transaction.find({
-    $or: [{ sender: req.user.userId }, { receiver: req.user.userId }]
+    $or: [{ sender: req.user.userId }, { receiver: req.user.userId }],
   })
-    .populate('sender', 'name email')
-    .populate('receiver', 'name email');
+    .populate("sender", "name email")
+    .populate("receiver", "name email");
 
   res.status(StatusCodes.OK).json({ transactions, count: transactions.length });
 };
@@ -68,11 +72,13 @@ const getSingleTransaction = async (req, res) => {
   const { id: transactionId } = req.params;
 
   const transaction = await Transaction.findOne({ _id: transactionId })
-    .populate('sender', 'name email')
-    .populate('receiver', 'name email');
+    .populate("sender", "name email")
+    .populate("receiver", "name email");
 
   if (!transaction) {
-    throw new CustomError.NotFoundError(`No transaction with id: ${transactionId}`);
+    throw new CustomError.NotFoundError(
+      `No transaction with id: ${transactionId}`
+    );
   }
 
   res.status(StatusCodes.OK).json({ transaction });
