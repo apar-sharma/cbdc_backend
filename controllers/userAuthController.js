@@ -4,6 +4,9 @@ const CustomError = require("../errors");
 const { attachCookiesToResponse, createTokenUser } = require("../utils");
 
 const register = async (req, res) => {
+  if (!req.body) {
+    throw new CustomError.BadRequestError("Please provide proper credentials");
+  }
   const { email, name, password } = req.body;
 
   const emailAlreadyExists = await User.findOne({ email });

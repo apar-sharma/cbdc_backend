@@ -20,10 +20,13 @@ router.route("/showMe").get(authenticateUser, showCurrentUser);
 router.route("/updateUser").patch(authenticateUser, updateUser);
 router.route("/updateUserPassword").patch(authenticateUser, updateUserPassword);
 
-router.route("/:id").get(authenticateUser, getSingleUser);
 
+router.get("/register", (req,res) => {
+  res.status(420).json({ error: "mula post haina GET request pathau" });
+});
 router.post("/register", authenticateUser,register);
 router.post("/login", authenticateUser, login);
 router.get("/logout", authenticateUser, logout);
+router.route("/:id").get(authenticateUser, getSingleUser);
 
 module.exports = router;
