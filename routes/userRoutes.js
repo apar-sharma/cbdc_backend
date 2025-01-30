@@ -22,7 +22,7 @@ router.route("/updateUserPassword").patch(authenticateUser, updateUserPassword);
 
 
 router.get("/register", (req,res) => {
-  return res.status(420).json({ error: "mula get haina post request pathau" });
+  return res.status(69).json({ error: "mula get haina post request pathau" });
 });
 router.post("/register", authenticateUser,register);
 router.post("/login", authenticateUser, login);
