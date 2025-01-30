@@ -42,11 +42,12 @@ const errorHandlerMiddleware = require("../middleware/error-handler");
     // app.use(xss());
     // app.use(mongoSanitize());
     
-    app.use(cors({
-      origin: true,
-      credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
-    }));
+    // app.use(cors({
+    //   origin: true,
+    //   credentials: true,
+    //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+    // }));
+    app.use(cors());
     app.use(express.json());
     // app.use(cookieParser(process.env.JWT_SECRET));
     
