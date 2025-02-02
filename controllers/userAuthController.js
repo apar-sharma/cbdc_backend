@@ -15,9 +15,7 @@ const register = async (req, res, next) => {
   }
 
   const user = await User.create({ name, email, password });
-  const tokenUser = createTokenUser(user);
-  // attachCookiesToResponse({ res, user: tokenUser });
-  return res.status(StatusCodes.CREATED).json({ user: tokenUser });
+  return res.status(StatusCodes.CREATED).json({ user});
 };
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -37,7 +35,7 @@ const login = async (req, res) => {
   const tokenUser = createTokenUser(user);
   // attachCookiesToResponse({ res, user: tokenUser });
 
-  res.status(StatusCodes.OK).json({ user: tokenUser });
+  res.status(StatusCodes.OK).json({ user });
 };
 const logout = async (req, res) => {
   // res.cookie("token", "logout", {
