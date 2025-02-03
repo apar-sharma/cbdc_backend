@@ -59,12 +59,20 @@ const updateUserPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success! Password Updated." });
 };
 
+const getBalance = async (req, res) => {
+  {userId} = req.body;
+  const balance = await User.findOne({ _id: req.params.id }).select("balance");
+  res.status(StatusCodes.OK).json(balance);
+}
+
 module.exports = {
   getAllUsers,
   getSingleUser,
+  getBalance,
   showCurrentUser,
   updateUser,
   updateUserPassword,
+
 };
 
 // update user with findOneAndUpdate

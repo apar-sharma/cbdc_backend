@@ -66,11 +66,11 @@ const getAllTransactions = async (req, res) => {
     .populate("sender", "name email")
     .populate("receiver", "name email");
 
-  res.status(StatusCodes.OK).json({ transactions, count: transactions.length });
+  res.status(StatusCodes.OK).json({ transactions });
 };
 
 const getSingleTransaction = async (req, res) => {
-  const { id: transactionId } = req.params;
+  const { id: transactionId } = req.body;
 
   const transaction = await Transaction.findOne({ _id: transactionId })
     .populate("sender", "name email")

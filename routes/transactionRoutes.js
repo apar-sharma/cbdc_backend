@@ -11,7 +11,7 @@ router.route('/')
   .post(authenticateUser, createTransaction)
   .get(authenticateUser, getAllTransactions);
 
-router.route('/:id')
+router.route('/getSingleTransaction')
   .get(authenticateUser, getSingleTransaction);
 
 module.exports = router;

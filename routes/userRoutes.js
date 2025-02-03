@@ -4,6 +4,7 @@ const {authenticateUser} = require("../middleware/authentication");
 const {
   getAllUsers,
   getSingleUser,
+  getBalance,
   showCurrentUser,
   updateUser,
   updateUserPassword,
@@ -12,6 +13,7 @@ const {
   register,
   login,
   logout,
+  getBalance,
 } = require("../controllers/userAuthController");
 
 router.route("/").get(authenticateUser, getAllUsers);
@@ -24,6 +26,7 @@ router.route("/updateUserPassword").patch(authenticateUser, updateUserPassword);
 router.post("/register", authenticateUser,register);
 router.post("/login", authenticateUser, login);
 router.get("/logout", authenticateUser, logout);
+router.get("/getBalance", getBalance);
 router.route("/:id").get(authenticateUser, getSingleUser);
 
 module.exports = router;
