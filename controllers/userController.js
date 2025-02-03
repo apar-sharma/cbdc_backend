@@ -23,7 +23,7 @@ const getSingleUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const userId = req.body;
+  const {userId} = req.body;
   const user = await User.findOne({ _id: userId }).select("-password");
   
   if (!user) {
