@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authenticateUser } = require("../middleware/authentication");
+
 
 const getHomePageData = async (req, res) => {
   const response = {
@@ -18,7 +18,7 @@ const getSystemStats = async (req, res) => {
   });
 };
 
-router.get("/", authenticateUser, getHomePageData);
-router.get("/stats", authenticateUser, getSystemStats);
+router.get("/", getHomePageData);
+router.get("/stats", getSystemStats);
 
 module.exports = router;

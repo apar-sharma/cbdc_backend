@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateUser } = require('../middleware/authentication');
 const {
   createTransaction,
   getAllTransactions,
@@ -8,10 +7,10 @@ const {
 } = require('../controllers/transactionController');
 
 router.route('/')
-  .post(authenticateUser, createTransaction)
-  .get(authenticateUser, getAllTransactions);
+  .post(createTransaction)
+  .get(getAllTransactions);
 
 router.route('/getSingleTransaction')
-  .get(authenticateUser, getSingleTransaction);
+  .get(getSingleTransaction);
 
 module.exports = router;

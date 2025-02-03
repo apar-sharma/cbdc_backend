@@ -22,9 +22,14 @@ const getSingleUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user });
 };
 
-const showCurrentUser = async (req, res) => {
+const getUser = async (req, res) => {
   const userId = req.body;
   const user = await User.findOne({ _id: userId }).select("-password");
+  
+  if (!user) {
+    throw new CustomError.NotFoundError(`No user with id: ${userId}`);
+  }
+  
   res.status(StatusCodes.OK).json({ user });
 };
 // update user with user.save()
@@ -80,7 +85,7 @@ module.exports = {
   getAllUsers,
   getSingleUser,
   getBalance,
-  showCurrentUser,
+  getUser,
   updateUser,
   updateUserPassword,
 
