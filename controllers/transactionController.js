@@ -70,7 +70,7 @@ const getAllTransactions = async (req, res) => {
 };
 
 const getSingleTransaction = async (req, res) => {
-  const { id: transactionId } = req.body;
+  const { transactionId } = req.body;
 
   const transaction = await Transaction.findOne({ _id: transactionId })
     .populate("sender", "name email")

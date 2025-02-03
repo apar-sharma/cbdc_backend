@@ -12,8 +12,7 @@ const {
 const {
   register,
   login,
-  logout,
-  getBalance,
+  logout
 } = require("../controllers/userAuthController");
 
 router.route("/").get(authenticateUser, getAllUsers);
