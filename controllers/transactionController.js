@@ -59,7 +59,7 @@ const createTransaction = async (req, res) => {
 };
 
 const getAllTransactions = async (req, res) => {
-  {userId} = req.body;
+  const { userId } = req.body;
   const transactions = await Transaction.find({
     $or: [{ userId }, { userId }],
   })
