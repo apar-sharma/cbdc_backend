@@ -17,15 +17,15 @@ const {
 
 router.route("/").get(authenticateUser, getAllUsers);
 
-router.route("/showMe").get(authenticateUser, showCurrentUser);
-router.route("/updateUser").patch(authenticateUser, updateUser);
-router.route("/updateUserPassword").patch(authenticateUser, updateUserPassword);
+router.route("/showMe").get(showCurrentUser);
+router.route("/updateUser").patch(updateUser);
+router.route("/updateUserPassword").patch(updateUserPassword);
 
 
-router.post("/register", authenticateUser,register);
-router.post("/login", authenticateUser, login);
-router.get("/logout", authenticateUser, logout);
+router.post("/register", register);
+router.post("/login",login);
+router.get("/logout", logout);
 router.get("/getBalance", getBalance);
-router.route("/:id").get(authenticateUser, getSingleUser);
+router.route("/:id").get(getSingleUser);
 
 module.exports = router;
