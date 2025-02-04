@@ -27,6 +27,5 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/getBalance/:id", getBalance);
-router.route("/:id").get(getSingleUser);
 
 module.exports = router;

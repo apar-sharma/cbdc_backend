@@ -75,6 +75,7 @@ const getAllTransactions = async (req, res) => {
   const transactions = await Transaction.find({
     $or: [{ sender: userId }, { receiver: userId }],
   })
+    .sort({ createdAt: -1 })
     .populate("sender", "name email")
     .populate("receiver", "name email");
 
@@ -86,7 +87,6 @@ const getSingleTransaction = async (req, res) => {
   console.log(transactionId);
 
   const transaction = await Transaction.findOne({ _id: transactionId })
-    .sort({ createdAt: -1 })
     .populate("sender", "name email")
     .populate("receiver", "name email");
 

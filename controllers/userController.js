@@ -13,14 +13,6 @@ const getAllUsers = async (req, res) => {
   res.status(StatusCodes.OK).json({ users });
 };
 
-const getSingleUser = async (req, res) => {
-  const user = await User.findOne({ _id: req.params.id }).select("-password");
-  if (!user) {
-    throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
-  }
-  checkPermissions(req.user, user._id);
-  res.status(StatusCodes.OK).json({ user });
-};
 
 const getUser = async (req, res) => {
   const user = await User.findOne({ _id: req.params.id }).select("-password");
@@ -107,7 +99,6 @@ const getBalance = async (req, res) => {
 
 module.exports = {
   getAllUsers,
-  getSingleUser,
   getBalance,
   getUser,
   updateUser,
