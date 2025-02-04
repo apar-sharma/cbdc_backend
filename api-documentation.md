@@ -32,11 +32,11 @@ Authentication header required for protected routes
 
 ### Transactions `/transactions`
 
-| Method | Endpoint                | Auth Required | Parameters                                                     | Description             |
-| ------ | ----------------------- | ------------- | -------------------------------------------------------------- | ----------------------- |
-| POST   | `/`                     | Yes           | `{senderId, receiverId, amount, transactionType, description}` | Create transaction      |
-| GET    | `/`                     | Yes           | `{userId}`                                                     | List all transactions   |
-| GET    | `/getSingleTransaction` | Yes           | `{transactionId}`                                              | Get transaction details |
+| Method | Endpoint                    | Auth Required | Parameters                                                     | Description             |
+| ------ | --------------------------- | ------------- | -------------------------------------------------------------- | ----------------------- |
+| POST   | `/`                         | Yes           | `{senderId, receiverId, amount, transactionType, description}` | Create transaction      |
+| GET    | `/:id`                      | Yes           | id (URL param)                                                 | List all transactions   |
+| GET    | `/getSingleTransaction/:id` | Yes           | transactionId (URL param)                                      | Get transaction details |
 
 ### System `/homepage`
 

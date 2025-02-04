@@ -60,8 +60,9 @@ const createTransaction = async (req, res) => {
 
 const getAllTransactions = async (req, res) => {
   const userId = req.params.id;
+  console.log(userId);
   const transactions = await Transaction.find({
-    $or: [{ userId }, { userId }],
+    $or: [{ sender: userId }, { receiver: userId }],
   })
     .populate("sender", "name email")
     .populate("receiver", "name email");
