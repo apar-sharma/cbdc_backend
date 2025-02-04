@@ -23,13 +23,12 @@ const getSingleUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const {userId} = req.body;
-  const user = await User.findOne({ _id: userId }).select("-password");
-  
+  const user = await User.findOne({ _id: req.params.id }).select("-password");
+
   if (!user) {
     throw new CustomError.NotFoundError(`No user with id: ${userId}`);
   }
-  
+
   res.status(StatusCodes.OK).json({ user });
 };
 // update user with user.save()
@@ -68,13 +67,12 @@ const updateUserPassword = async (req, res) => {
 
 const getBalance = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const user = await User.findOne({ _id: userId }).select("balance");
-    
+    const user = await User.findOne({ _id: req.params.id }).select("balance");
+
     if (!user) {
       throw new CustomError.NotFoundError(`No user with id: ${userId}`);
     }
-    
+
     res.status(StatusCodes.OK).json({ balance: user.balance });
   } catch (error) {
     throw new CustomError.BadRequestError("Error fetching balance");
@@ -88,7 +86,6 @@ module.exports = {
   getUser,
   updateUser,
   updateUserPassword,
-
 };
 
 // update user with findOneAndUpdate

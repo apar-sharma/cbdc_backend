@@ -12,20 +12,19 @@ const {
 const {
   register,
   login,
-  logout
+  logout,
 } = require("../controllers/userAuthController");
 
 router.route("/").get(getAllUsers);
 
-router.route("/showMe").get(getUser);
+router.route("/showMe/:id").get(getUser);
 router.route("/updateUser").patch(updateUser);
 router.route("/updateUserPassword").patch(updateUserPassword);
 
-
 router.post("/register", register);
-router.post("/login",login);
+router.post("/login", login);
 router.get("/logout", logout);
-router.get("/getBalance", getBalance);
+router.get("/getBalance/:id", getBalance);
 router.route("/:id").get(getSingleUser);
 
 module.exports = router;

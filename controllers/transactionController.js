@@ -5,8 +5,8 @@ const CustomError = require("../errors");
 const mongoose = require("mongoose");
 
 const createTransaction = async (req, res) => {
-  const { senderId, receiverId, amount, transactionType, description } = req.body;
-
+  const { senderId, receiverId, amount, transactionType, description } =
+    req.body;
 
   // Start session for transaction
   const session = await mongoose.startSession();
@@ -59,7 +59,7 @@ const createTransaction = async (req, res) => {
 };
 
 const getAllTransactions = async (req, res) => {
-  const { userId } = req.body;
+  const userId = req.params.id;
   const transactions = await Transaction.find({
     $or: [{ userId }, { userId }],
   })
@@ -70,7 +70,8 @@ const getAllTransactions = async (req, res) => {
 };
 
 const getSingleTransaction = async (req, res) => {
-  const { transactionId } = req.body;
+  const transactionId = req.params.id;
+  console.log(transactionId);
 
   const transaction = await Transaction.findOne({ _id: transactionId })
     .populate("sender", "name email")
