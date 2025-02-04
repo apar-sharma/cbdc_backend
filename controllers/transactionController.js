@@ -86,9 +86,9 @@ const getSingleTransaction = async (req, res) => {
   console.log(transactionId);
 
   const transaction = await Transaction.findOne({ _id: transactionId })
+    .sort({ createdAt: -1 });
     .populate("sender", "name email")
     .populate("receiver", "name email")
-    .sort({ createdAt: -1 });
 
   if (!transaction) {
     throw new CustomError.NotFoundError(
