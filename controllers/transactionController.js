@@ -5,8 +5,14 @@ const CustomError = require("../errors");
 const mongoose = require("mongoose");
 
 const createTransaction = async (req, res) => {
-  const { senderId, receiverId, amount, transactionType, description } =
-    req.body;
+  const {
+    senderId,
+    receiverId,
+    amount,
+    transactionType,
+    description,
+    transactionPin,
+  } = req.body;
 
   // Start session for transaction
   const session = await mongoose.startSession();
@@ -19,7 +25,12 @@ const createTransaction = async (req, res) => {
     if (!receiver) {
       throw new CustomError.NotFoundError("Receiver not found");
     }
-
+    const isTransactionPinCorrect = await sender.compareTransactionPin(
+      transactionPin
+    );
+    if (!isTransactionPinCorrect) {
+      throw new CustomError.BadRequestError("Invalid transaction pin");
+    }
     if (transactionType === "transfer") {
       // Check sufficient balance
       if (sender.balance < amount) {
@@ -76,7 +87,8 @@ const getSingleTransaction = async (req, res) => {
 
   const transaction = await Transaction.findOne({ _id: transactionId })
     .populate("sender", "name email")
-    .populate("receiver", "name email");
+    .populate("receiver", "name email")
+    .sort({ createdAt: -1 });
 
   if (!transaction) {
     throw new CustomError.NotFoundError(

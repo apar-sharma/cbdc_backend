@@ -23,14 +23,18 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide password"],
     minlength: 6,
   },
+  transactionPin: {
+    type: String,
+    minlength: 4,
+  },
   balance: {
     type: Number,
     default: 0,
-    min: 0
+    min: 0,
   },
   role: {
     type: String,
-    enum: ["admin","bank", "user"],
+    enum: ["admin", "bank", "user"],
     default: "user",
   },
 });
@@ -38,13 +42,23 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre("save", async function () {
   // console.log(this.modifiedPaths());
   // console.log(this.isModified('name'));
-  if (!this.isModified("password")) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  if (this.isModified("password")) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+
+  if (this.isModified("transactionPin")) {
+    const salt = await bcrypt.genSalt(10);
+    this.transactionPin = await bcrypt.hash(this.transactionPin, salt);
+  }
 });
 
 UserSchema.methods.comparePassword = async function (canditatePassword) {
   const isMatch = await bcrypt.compare(canditatePassword, this.password);
+  return isMatch;
+};
+UserSchema.methods.compareTransactionPin = async function (candidatePin) {
+  const isMatch = await bcrypt.compare(candidatePin, this.transactionPin);
   return isMatch;
 };
 

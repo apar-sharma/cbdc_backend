@@ -21,14 +21,15 @@ Authentication header required for protected routes
 
 ### User Management `/user`
 
-| Method | Endpoint              | Auth Required | Parameters                   | Description      |
-| ------ | --------------------- | ------------- | ---------------------------- | ---------------- |
-| GET    | `/`                   | Yes           | -                            | Get all users    |
-| GET    | `/showMe/:id`         | Yes           | id (URL param)               | Get current user |
-| PATCH  | `/updateUser`         | Yes           | `{email, name}`              | Update profile   |
-| PATCH  | `/updateUserPassword` | Yes           | `{oldPassword, newPassword}` | Update password  |
-| GET    | `/getBalance/:id`     | Yes           | id (URL param)               | Get user balance |
-| GET    | `/:id`                | Yes           | id (URL param)               | Get single user  |
+| Method | Endpoint              | Auth Required | Parameters                   | Description         |
+| ------ | --------------------- | ------------- | ---------------------------- | ------------------- |
+| GET    | `/`                   | Yes           | -                            | Get all users       |
+| GET    | `/setPin`             | Yes           | `{userId, transactionPin}`   | Set transaction pin |
+| GET    | `/showMe/:id`         | Yes           | id (URL param)               | Get current user    |
+| PATCH  | `/updateUser`         | Yes           | `{email, name}`              | Update profile      |
+| PATCH  | `/updateUserPassword` | Yes           | `{oldPassword, newPassword}` | Update password     |
+| GET    | `/getBalance/:id`     | Yes           | id (URL param)               | Get user balance    |
+| GET    | `/:id`                | Yes           | id (URL param)               | Get single user     |
 
 ### Transactions `/transactions`
 

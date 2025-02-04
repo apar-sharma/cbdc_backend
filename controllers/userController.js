@@ -48,6 +48,16 @@ const updateUser = async (req, res) => {
   // attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
+const setPin = async (req, res) => {
+  const { transactionPin, userId } = req.body;
+  if (!transactionPin) {
+    throw new CustomError.BadRequestError("Please provide a transaction pin");
+  }
+  const user = await User.findOne({ _id: userId });
+  user.transactionPin = transactionPin;
+  await user.save();
+  res.status(StatusCodes.OK).json({ msg: "Success! Transaction Pin Set." });
+};
 const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   if (!oldPassword || !newPassword) {
@@ -67,7 +77,19 @@ const updateUserPassword = async (req, res) => {
 
 const getBalance = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.id }).select("balance");
+    const userId = req.params.id;
+    const user = await User.findById(userId)
+      .select("balance")
+      .maxTimeMS(30000)
+      .catch(async (error) => {
+        if (error.code === "ECONNRESET" || error.name === "MongooseError") {
+          // Wait and retry once
+          console.log("Retrying...");
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          return await User.findById(userId).select("balance");
+        }
+        throw error;
+      });
 
     if (!user) {
       throw new CustomError.NotFoundError(`No user with id: ${userId}`);
@@ -75,7 +97,11 @@ const getBalance = async (req, res) => {
 
     res.status(StatusCodes.OK).json({ balance: user.balance });
   } catch (error) {
-    throw new CustomError.BadRequestError("Error fetching balance");
+    console.error("Balance fetch error:", error);
+    if (error.name === "CastError") {
+      throw new CustomError.BadRequestError("Invalid user ID format");
+    }
+    throw error;
   }
 };
 
@@ -85,6 +111,7 @@ module.exports = {
   getBalance,
   getUser,
   updateUser,
+  setPin,
   updateUserPassword,
 };
 
