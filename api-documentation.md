@@ -39,12 +39,27 @@ Authentication header required for protected routes
 | GET    | `/:id`                      | Yes           | id (URL param)                                                 | List all transactions   |
 | GET    | `/getSingleTransaction/:id` | Yes           | transactionId (URL param)                                      | Get transaction details |
 
-### System `/homepage`
+### Images `/images`
 
-| Method | Endpoint | Auth Required | Parameters | Description           |
-| ------ | -------- | ------------- | ---------- | --------------------- |
-| GET    | `/`      | Yes           | -          | Get homepage data     |
-| GET    | `/stats` | Yes           | -          | Get system statistics |
+| Method | Endpoint                     | Auth Required | Parameters     | Description                | Body Format |
+| ------ | ---------------------------- | ------------- | -------------- | -------------------------- | ----------- |
+| POST   | `/profile/:id`               | Yes           | id (URL param) | Upload profile photo       | form-data   |
+| POST   | `/government-id/:id`         | Yes           | id (URL param) | Upload government ID       | form-data   |
+| GET    | `/profile/:id`               | No            | id (URL param) | Get user's profile photo   | -           |
+| GET    | `/government-id/:id`         | No            | id (URL param) | Get user's government ID   | -           |
+| POST   | `/complete-registration/:id` | No            | id (URL param) | Complete user registration | form-data   |
+
+#### Complete Registration Details
+
+The `/complete-registration/:id` endpoint accepts:
+
+- **URL Parameter**: user ID
+- **Form Data**:
+  - `dateOfBirth`: User's date of birth
+  - `governmentIdNumber`: Government ID number/string
+  - `profilePhoto`: Profile photo image file (max 5MB)
+  - `governmentIdImage`: Government ID image file (max 5MB)
+- **Response**: Updates user profile with all provided information and sets KYC status to "pending"
 
 ## Status Codes
 
@@ -69,7 +84,17 @@ User {
   email: String,
   password: String,
   balance: Number,
-  role: String
+  role: String,
+  profilePhoto: {
+    data: Buffer,
+    contentType: String
+  },
+  governmentId: {
+    data: Buffer,
+    contentType: String
+  },
+  kycStatus: String,  // "pending", "approved", "rejected"
+  transactionPin: String
 }
 
 Transaction {
@@ -81,3 +106,18 @@ Transaction {
   status: String
 }
 ```
+
+## File Upload Requirements
+
+### Profile Photo
+
+- Max size: 5MB
+- Type: Images only (JPEG, PNG, etc.)
+- Updates user's profile photo field
+
+### Government ID
+
+- Max size: 5MB
+- Type: Images only (JPEG, PNG, etc.)
+- Updates user's government ID field
+- Automatically sets KYC status to "pending" for admin review
