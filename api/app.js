@@ -26,6 +26,7 @@ const userRouter = require("../routes/userRoutes");
 const homePageRouter = require("../routes/homePageRoutes");
 const transactionRouter = require("../routes/transactionRoutes");
 const imageRouter = require("../routes/imageRoutes");
+const kycRouter = require("../routes/kycRoutes");
 
 // middleware
 const notFoundMiddleware = require("../middleware/not-found");
@@ -57,6 +58,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/homepage", homePageRouter);
 app.use("/api/v1/transactions", transactionRouter);
 app.use("/api/v1/images", imageRouter);
+app.use("/api/v1/kyc", kycRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

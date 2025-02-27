@@ -49,6 +49,14 @@ Authentication header required for protected routes
 | GET    | `/government-id/:id`         | No            | id (URL param) | Get user's government ID   | -           |
 | POST   | `/complete-registration/:id` | No            | id (URL param) | Complete user registration | form-data   |
 
+### KYC Management `/kyc`
+
+| Method | Endpoint       | Auth Required | Role Required | Parameters     | Description                           |
+| ------ | -------------- | ------------- | ------------- | -------------- | ------------------------------------- |
+| GET    | `/pending`     | Yes           | admin, bank   | -              | Get all users with pending KYC status |
+| POST  | `/approve/:id` | Yes           | admin, bank   | id (URL param) | Approve KYC status for specified user |
+| POST  | `/reject/:id`  | Yes           | admin, bank   | id (URL param) | Reject KYC status for specified user  |
+
 #### Complete Registration Details
 
 The `/complete-registration/:id` endpoint accepts:
@@ -93,7 +101,7 @@ User {
     data: Buffer,
     contentType: String
   },
-  kycStatus: String,  // "pending", "approved", "rejected"
+  kycStatus: String,  // "not_submitted", "pending", "approved", "rejected"
   transactionPin: String
 }
 
