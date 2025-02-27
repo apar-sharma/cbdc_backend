@@ -15,7 +15,7 @@ const getAllUsers = async (req, res) => {
 
 
 const getUser = async (req, res) => {
-  const user = await User.findOne({ _id: req.params.id }).select("-password");
+  const user = await User.findOne({ _id: req.params.id }).select("-password -profilePhoto -governmentId");
 
   if (!user) {
     throw new CustomError.NotFoundError(`No user with id: ${userId}`);
