@@ -67,7 +67,7 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
-    await connectDB(process.env.CONNECT_URL_DEVELOPMENT);
+    await connectDB(process.env.CONNECT_URL);
     if (process.env.NODE_ENV !== "production") {
       app.listen(port, () =>
         console.log(`Server is listening on port ${port}...`)
