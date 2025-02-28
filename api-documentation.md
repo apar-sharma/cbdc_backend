@@ -39,6 +39,12 @@ Authentication header required for protected routes
 | GET    | `/:id`                      | Yes           | id (URL param)                                                 | List all transactions   |
 | GET    | `/getSingleTransaction/:id` | Yes           | transactionId (URL param)                                      | Get transaction details |
 
+### Minting Operations `/mint`
+
+| Method | Endpoint | Auth Required | Role Required | Parameters         | Description                    |
+| ------ | -------- | ------------- | ------------- | ------------------ | ------------------------------ |
+| POST   | `/mint`  | Yes           | admin, bank   | `{userId, amount}` | Mint tokens for specified user |
+
 ### Images `/images`
 
 | Method | Endpoint                     | Auth Required | Parameters     | Description                | Body Format |
@@ -54,8 +60,8 @@ Authentication header required for protected routes
 | Method | Endpoint       | Auth Required | Role Required | Parameters     | Description                           |
 | ------ | -------------- | ------------- | ------------- | -------------- | ------------------------------------- |
 | GET    | `/pending`     | Yes           | admin, bank   | -              | Get all users with pending KYC status |
-| POST  | `/approve/:id` | Yes           | admin, bank   | id (URL param) | Approve KYC status for specified user |
-| POST  | `/reject/:id`  | Yes           | admin, bank   | id (URL param) | Reject KYC status for specified user  |
+| POST   | `/approve/:id` | Yes           | admin, bank   | id (URL param) | Approve KYC status for specified user |
+| POST   | `/reject/:id`  | Yes           | admin, bank   | id (URL param) | Reject KYC status for specified user  |
 
 #### Complete Registration Details
 

@@ -3,6 +3,34 @@ const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const mongoose = require("mongoose");
+const { Wallets, Gateway } = require("fabric-network");
+const path = require("path");
+
+const ccpPath = path.resolve(__dirname, "..", "..", "..", "..", "fabric-samples", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.json");
+const ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
+const walletPath = path.join(process.cwd(), "wallet");
+
+async function connectToNetwork(user) {
+    const wallet = await Wallets.newFileSystemWallet(walletPath);
+    const gateway = new Gateway();
+    
+    await gateway.connect(ccp, {
+        wallet,
+        identity: user,
+        discovery: { 
+            enabled: true, 
+            asLocalhost: true,
+            // Added TLS settings
+            tlsCACerts: Buffer.from(ccp.certificateAuthorities['ca.org1.example.com'].tlsCACerts.pem).toString()
+        }
+    });
+    
+    const network = await gateway.getNetwork("mychannel");
+    return {
+        gateway,
+        contract: network.getContract("basic")
+    };
+}
 
 const createTransaction = async (req, res) => {
   const {
@@ -13,6 +41,16 @@ const createTransaction = async (req, res) => {
     description,
     transactionPin,
   } = req.body;
+
+  try {
+    console.log("User ID for transfer:", senderId);
+    const { gateway, contract } = await connectToNetwork(senderId);
+    await contract.submitTransaction("TransferTokens", senderId, receiverId, amount);
+    await gateway.disconnect();
+    res.json({ message: "Tokens transferred successfully" });
+} catch (error) {
+    res.status(500).json({ error: error.message });
+}
 
   // Start session for transaction
   const session = await mongoose.startSession();

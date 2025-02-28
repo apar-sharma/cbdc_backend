@@ -16,6 +16,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 
 // database
 const connectDB = require("../db/connect");
+const initializeAdmins = require("./createAdmins");
 
 // Increase payload size limits - add this before other middleware configurations
 app.use(express.json({ limit: "50mb" }));
@@ -68,11 +69,10 @@ const port = process.env.PORT || 5000;
 const start = async () => {
   try {
     await connectDB(process.env.CONNECT_URL);
-    if (process.env.NODE_ENV !== "production") {
-      app.listen(port, () =>
-        console.log(`Server is listening on port ${port}...`)
-      );
-    }
+    await initializeAdmins();
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    );
   } catch (error) {
     console.log(error);
   }
