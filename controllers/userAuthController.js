@@ -24,6 +24,7 @@ const ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
 const walletPath = path.join(process.cwd(), "wallet");
 
 const register = async (req, res, next) => {
+  console.log("registering user..........");
   if (!req.body) {
     throw new CustomError.BadRequestError("Please provide proper credentials");
   }
@@ -35,9 +36,10 @@ const register = async (req, res, next) => {
   }
 
   const user = await User.create({ name, email, password });
-  return res.status(StatusCodes.CREATED).json({ user });
+  
 
   try {
+    console.log("creating user in ledger......");
     const userId = user._id;
     if (!userId) return res.status(400).json({ error: "User ID required" });
 
@@ -93,9 +95,10 @@ const register = async (req, res, next) => {
       type: "X.509",
     });
 
-    res.json({ message: "User registered" });
+    res.status(StatusCodes.CREATED).json({ user });
+    console.log("User registered successfully");
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    throw new CustomError.NotFoundError(error.message);
   }
 };
 

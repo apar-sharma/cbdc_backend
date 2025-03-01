@@ -20,6 +20,8 @@
     "express-fileupload": "^1.5.1",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.5.0",
+    "fabric-ca-client": "^2.2.19",
+    "fabric-network": "^2.2.19",
     "helmet": "^8.0.0",
     "http-status-codes": "^2.3.0",
     "joi": "^17.13.3",

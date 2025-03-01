@@ -95,7 +95,7 @@ const mintToken = async (req, res) => {
 
     // 2. Update user balance in MongoDB
     const parsedAmount = parseFloat(amount);
-    user.balance = parsedAmount; // Set balance to minted amount
+    user.balance += parsedAmount; // Set balance to minted amount
     await user.save();
 
     res.status(StatusCodes.OK).json({

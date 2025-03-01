@@ -4,6 +4,7 @@ const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const mongoose = require("mongoose");
 const { Wallets, Gateway } = require("fabric-network");
+const fs = require("fs");
 const path = require("path");
 
 const ccpPath = path.resolve(__dirname, "..", "..", "..", "..", "fabric-samples", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.json");
@@ -42,68 +43,97 @@ const createTransaction = async (req, res) => {
     transactionPin,
   } = req.body;
 
+  if (!senderId || !receiverId || !amount || !transactionType || !transactionPin) {
+    throw new CustomError.BadRequestError("All fields are required");
+  }
+  
+  let session = null;
+  const isProductionDb = process.env.NODE_ENV !== "localhost";
+  
   try {
-    console.log("User ID for transfer:", senderId);
-    const { gateway, contract } = await connectToNetwork(senderId);
-    await contract.submitTransaction("TransferTokens", senderId, receiverId, amount);
-    await gateway.disconnect();
-    res.json({ message: "Tokens transferred successfully" });
-} catch (error) {
-    res.status(500).json({ error: error.message });
-}
-
-  // Start session for transaction
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
+    // Only use transactions with MongoDB Atlas (replica set)
+    if (isProductionDb) {
+      console.log("Using transactions with MongoDB Atlas");
+      session = await mongoose.startSession();
+      session.startTransaction();
+    }
+    
     const sender = await User.findById(senderId);
     const receiver = await User.findById(receiverId);
-
+    
     if (!receiver) {
       throw new CustomError.NotFoundError("Receiver not found");
     }
-    const isTransactionPinCorrect = await sender.compareTransactionPin(
-      transactionPin
-    );
+    
+    const isTransactionPinCorrect = await sender.compareTransactionPin(transactionPin);
     if (!isTransactionPinCorrect) {
       throw new CustomError.BadRequestError("Invalid transaction pin");
     }
+    
     if (transactionType === "transfer") {
-      // Check sufficient balance
       if (sender.balance < amount) {
         throw new CustomError.BadRequestError("Insufficient balance");
+      }
+      
+      try {
+        console.log("User ID for transfer:", senderId);
+        const { gateway, contract } = await connectToNetwork(senderId);
+        await contract.submitTransaction("TransferTokens", senderId, receiverId, amount);
+        await gateway.disconnect();
+      } catch (error) {
+        throw new CustomError.BadRequestError("Failed to transfer tokens");
       }
 
       // Update balances
       sender.balance -= amount;
       receiver.balance += amount;
 
-      await sender.save({ session });
-      await receiver.save({ session });
+      // Save with or without session
+      if (session) {
+        await sender.save({ session });
+        await receiver.save({ session });
+      } else {
+        await sender.save();
+        await receiver.save();
+      }
     }
 
-    const transaction = await Transaction.create(
-      [
-        {
+    let transaction;
+    if (session) {
+      transaction = await Transaction.create(
+        [{
           sender: senderId,
           receiver: receiverId,
           amount,
           transactionType,
           description,
           status: "completed",
-        },
-      ],
-      { session }
-    );
+        }],
+        { session }
+      );
+      await session.commitTransaction();
+      transaction = transaction[0];
+    } else {
+      transaction = await Transaction.create({
+        sender: senderId,
+        receiver: receiverId,
+        amount,
+        transactionType,
+        description,
+        status: "completed",
+      });
+    }
 
-    await session.commitTransaction();
-    res.status(StatusCodes.CREATED).json({ transaction: transaction[0] });
+    res.status(StatusCodes.CREATED).json({ transaction });
   } catch (error) {
-    await session.abortTransaction();
+    if (session) {
+      await session.abortTransaction();
+    }
     throw error;
   } finally {
-    session.endSession();
+    if (session) {
+      session.endSession();
+    }
   }
 };
 

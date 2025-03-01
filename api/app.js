@@ -28,6 +28,7 @@ const homePageRouter = require("../routes/homePageRoutes");
 const transactionRouter = require("../routes/transactionRoutes");
 const imageRouter = require("../routes/imageRoutes");
 const kycRouter = require("../routes/kycRoutes");
+const mintRouter = require("../routes/mintRoutes");
 
 // middleware
 const notFoundMiddleware = require("../middleware/not-found");
@@ -60,6 +61,7 @@ app.use("/api/v1/homepage", homePageRouter);
 app.use("/api/v1/transactions", transactionRouter);
 app.use("/api/v1/images", imageRouter);
 app.use("/api/v1/kyc", kycRouter);
+app.use("/api/v1/mint", mintRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -68,7 +70,7 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
-    await connectDB(process.env.CONNECT_URL);
+    await connectDB(process.env.CONNECT_URL_DEVELOPMENT);
     await initializeAdmins();
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
